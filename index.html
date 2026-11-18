@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#f9dfe3">
+<title>Notre petit univers ♡</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23e0626f' d='M12 21s-7.5-4.6-9.6-9.3C.9 8.2 2.7 4.5 6.3 4.5c2 0 3.6 1 4.7 2.6l1 1.4 1-1.4c1.1-1.6 2.7-2.6 4.7-2.6 3.6 0 5.4 3.7 3.9 7.2C19.5 16.4 12 21 12 21z'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Sprite d'icônes -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 2.7 4.5 6.3 4.5c2 0 3.6 1 4.7 2.6l1 1.4 1-1.4c1.1-1.6 2.7-2.6 4.7-2.6 3.6 0 5.4 3.7 3.9 7.2C19.5 16.4 12 21 12 21z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-fit" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></symbol>
+    <symbol id="i-rotcw" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></symbol>
+    <symbol id="i-rotccw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></symbol>
+    <symbol id="i-restart" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M8 16H3v5"/></symbol>
+    <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-volume" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></symbol>
+  </defs>
+</svg>
+
+<!-- Fond -->
+<div class="bg" aria-hidden="true">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <canvas id="bg-canvas"></canvas>
+</div>
+<canvas id="fx-canvas" aria-hidden="true"></canvas>
+
+<!-- Barre du haut -->
+<div class="topbar">
+  <button class="icon-btn" id="btn-music" aria-label="Musique" aria-expanded="false"><svg class="ic"><use href="#i-music"/></svg></button>
+  <button class="icon-btn" id="btn-settings" aria-label="Réglages" aria-expanded="false"><svg class="ic"><use href="#i-gear"/></svg></button>
+</div>
+
+<div class="panel music-panel" id="music-panel" hidden>
+  <div class="mp-title" id="mp-title">Notre musique ♡</div>
+  <div class="mp-row">
+    <button class="icon-btn small" id="mp-play" aria-label="Lecture"><svg class="ic fill"><use href="#i-play"/></svg></button>
+    <input type="range" id="mp-seek" min="0" max="1000" value="0" aria-label="Progression">
+    <span class="mp-time" id="mp-time">0:00</span>
+  </div>
+  <div class="mp-row">
+    <svg class="ic small-ic"><use href="#i-volume"/></svg>
+    <input type="range" id="mp-vol" min="0" max="100" value="60" aria-label="Volume">
+  </div>
+  <div class="mp-missing" id="mp-missing" hidden></div>
+</div>
+
+<div class="panel settings-panel" id="settings-panel" hidden>
+  <div class="mp-title" data-t="settings.title">Réglages</div>
+  <label class="switch"><span data-t="settings.sound">Effets sonores</span><input type="checkbox" id="set-sound"><i></i></label>
+  <label class="switch"><span data-t="settings.anim">Animations</span><input type="checkbox" id="set-anim"><i></i></label>
+</div>
+
+<div class="whisper" id="whisper" role="status" aria-live="polite"></div>
+
+<main id="app">
+
+  <!-- ACCUEIL -->
+  <section class="screen active" id="screen-intro">
+    <div class="intro-inner">
+      <div class="intro-heart" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg></div>
+      <p class="kicker" data-t="intro.kicker"></p>
+      <h1 class="title" id="intro-title" data-t="intro.title"></h1>
+      <p class="lead fade-up" style="--d:1.8s" data-t="intro.subtitle"></p>
+      <button class="btn primary big fade-up" style="--d:2.6s" id="btn-begin" data-t="intro.button"></button>
+    </div>
+  </section>
+
+  <!-- PUZZLE -->
+  <section class="screen" id="screen-puzzle">
+    <div class="setup" id="setup">
+      <div class="card setup-card">
+        <h2 class="h2" data-t="setup.title"></h2>
+        <p class="muted" data-t="setup.subtitle"></p>
+        <div class="diff-grid" id="diff-grid" role="radiogroup"></div>
+        <ul class="howto" id="howto"></ul>
+        <div class="setup-actions">
+          <button class="btn primary" id="btn-start" data-t="setup.start"></button>
+          <button class="btn ghost" id="btn-resume" hidden></button>
+          <button class="btn link" id="btn-back" data-t="setup.back"></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="game" id="game" hidden>
+      <div class="hud">
+        <div class="hud-progress">
+          <svg class="heart-meter" viewBox="0 0 24 24" aria-hidden="true">
+            <defs>
+              <clipPath id="hm-clip"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 2.7 4.5 6.3 4.5c2 0 3.6 1 4.7 2.6l1 1.4 1-1.4c1.1-1.6 2.7-2.6 4.7-2.6 3.6 0 5.4 3.7 3.9 7.2C19.5 16.4 12 21 12 21z"/></clipPath>
+              <linearGradient id="hm-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4a0b0"/><stop offset="1" stop-color="#e0626f"/></linearGradient>
+            </defs>
+            <path class="hm-bg" d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 2.7 4.5 6.3 4.5c2 0 3.6 1 4.7 2.6l1 1.4 1-1.4c1.1-1.6 2.7-2.6 4.7-2.6 3.6 0 5.4 3.7 3.9 7.2C19.5 16.4 12 21 12 21z"/>
+            <g clip-path="url(#hm-clip)"><rect id="hm-fill" x="0" y="0" width="24" height="24" fill="url(#hm-grad)"/></g>
+            <path class="hm-line" d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 2.7 4.5 6.3 4.5c2 0 3.6 1 4.7 2.6l1 1.4 1-1.4c1.1-1.6 2.7-2.6 4.7-2.6 3.6 0 5.4 3.7 3.9 7.2C19.5 16.4 12 21 12 21z"/>
+          </svg>
+          <div class="hud-count"><b id="hud-count">0/0</b><span data-t="hud.pieces"></span></div>
+        </div>
+        <div class="hud-stat"><span data-t="hud.time"></span><b id="hud-time">00:00</b></div>
+        <div class="hud-stat"><span data-t="hud.left"></span><b id="hud-left">0</b></div>
+        <div class="hud-stat"><span data-t="hud.errors"></span><b id="hud-errors">0</b></div>
+      </div>
+
+      <div class="stage" id="stage">
+        <div class="world" id="world">
+          <div class="reserve" id="reserve"></div>
+          <div class="board" id="board"></div>
+          <div id="pieces"></div>
+        </div>
+        <div class="rot-pill stage-ui" id="rot-pill" hidden>
+          <button class="icon-btn" id="btn-rotl" data-tt="hud.rotateLeft"><svg class="ic"><use href="#i-rotccw"/></svg></button>
+          <button class="icon-btn" id="btn-rotr" data-tt="hud.rotateRight"><svg class="ic"><use href="#i-rotcw"/></svg></button>
+        </div>
+        <div class="overlay pause-overlay stage-ui" id="pause-overlay" hidden>
+          <div class="card pause-card">
+            <h3 class="h2" data-t="game.pauseTitle"></h3>
+            <p class="muted" data-t="game.pauseText"></p>
+            <button class="btn primary" id="btn-resume-game" data-t="game.resume"></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dock">
+        <button class="icon-btn" id="btn-pause" data-tt="hud.pause"><svg class="ic"><use href="#i-pause"/></svg></button>
+        <button class="icon-btn" id="btn-zout" data-tt="hud.zoomOut"><svg class="ic"><use href="#i-minus"/></svg></button>
+        <button class="icon-btn" id="btn-fit" data-tt="hud.fit"><svg class="ic"><use href="#i-fit"/></svg></button>
+        <button class="icon-btn" id="btn-zin" data-tt="hud.zoomIn"><svg class="ic"><use href="#i-plus"/></svg></button>
+        <button class="icon-btn" id="btn-restart" data-tt="hud.restart"><svg class="ic"><use href="#i-restart"/></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SURPRISE : construite uniquement après la résolution du puzzle -->
+  <div id="surprise-root"></div>
+</main>
+
+<!-- Grande finale -->
+<div class="finale" id="finale" hidden>
+  <div class="finale-glow"></div>
+  <div class="finale-ring"></div>
+  <figure class="finale-art" id="finale-art"><img id="finale-img" alt="Notre illustration"><span class="finale-shine"></span></figure>
+  <div class="finale-text">
+    <h2 class="h2" id="finale-title"></h2>
+    <p class="finale-msg" id="finale-msg"></p>
+    <p class="muted" id="finale-stats"></p>
+    <button class="btn primary big" id="btn-unlock" hidden></button>
+  </div>
+</div>
+
+<!-- Transition -->
+<div class="veil" id="veil" aria-hidden="true"><svg class="veil-heart"><use href="#i-heart"/></svg></div>
+
+<!-- Modale de confirmation -->
+<div class="modal" id="modal" hidden>
+  <div class="card modal-card" role="dialog" aria-modal="true">
+    <h3 class="h2" id="modal-title"></h3>
+    <p class="muted" id="modal-text"></p>
+    <div class="modal-actions" id="modal-actions"></div>
+  </div>
+</div>
+
+<noscript><div class="noscript">Ce petit cadeau a besoin de JavaScript pour fonctionner ♡</div></noscript>
+
+<script src="config.js"></script>
+<script src="js/core.js"></script>
+<script src="js/puzzle.js"></script>
+<script src="js/surprise.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

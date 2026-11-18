@@ -100,6 +100,17 @@
       const s = Math.floor(audio.currentTime); time.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
     });
     setIcon();
+    // Lancement dès la première interaction (les navigateurs interdisent de démarrer un son sans geste).
+    // Se fait une seule fois : si elle met en pause, on ne relance jamais de force.
+    let auto = !ok;
+    const autoStart = (e) => {
+      if (auto) return;
+      if (e.target.closest && e.target.closest('#music-panel, #btn-music')) { auto = true; return; }
+      auto = true;
+      if (audio.paused) audio.play().catch(() => {});
+      document.removeEventListener('click', autoStart, true);
+    };
+    document.addEventListener('click', autoStart, true);
   })();
 
   /* ---------- Petits détails ---------- */

@@ -67,14 +67,26 @@
   /* ---------- Lecteur de musique ---------- */
   (function music() {
     const m = cfg.music || {};
-    $('#mp-title').textContent = m.title || 'Musique';
+    const tracks = (m.tracks && m.tracks.length ? m.tracks : (m.file ? [{ file: m.file, title: m.title }] : []));
+    const titleEl = $('#mp-title');
     const playBtn = $('#mp-play'), seek = $('#mp-seek'), vol = $('#mp-vol'), time = $('#mp-time'), missing = $('#mp-missing');
-    const audio = new Audio(); audio.loop = true; audio.preload = 'metadata';
-    let ok = !!m.file;
+    const prevBtn = $('#mp-prev'), nextBtn = $('#mp-next');
+    const audio = new Audio(); audio.preload = 'metadata';
+    let ok = tracks.length > 0, idx = 0;
     const fail = () => {
       ok = false; playBtn.disabled = true; seek.disabled = true; missing.hidden = false; missing.textContent = NU.t('music.missing');
     };
-    if (!m.file) fail(); else { audio.addEventListener('error', fail); audio.src = m.file; }
+    const load = (i, autoplay) => {
+      idx = (i + tracks.length) % tracks.length;
+      titleEl.textContent = (tracks[idx].title || 'Musique') + (tracks.length > 1 ? ` (${idx + 1}/${tracks.length})` : '');
+      audio.src = tracks[idx].file; seek.value = 0; time.textContent = '0:00';
+      if (autoplay) audio.play().catch(() => {});
+    };
+    prevBtn.hidden = nextBtn.hidden = tracks.length < 2;
+    prevBtn.onclick = () => ok && load(idx - 1, !audio.paused);
+    nextBtn.onclick = () => ok && load(idx + 1, !audio.paused);
+    audio.addEventListener('ended', () => load(idx + 1, true));
+    if (!ok) { titleEl.textContent = m.title || 'Musique'; fail(); } else { audio.addEventListener('error', fail); load(0, false); }
     const setRange = (r) => r.style.setProperty('--v', (r.value / r.max * 100) + '%');
     const setIcon = () => playBtn.querySelector('use').setAttribute('href', audio.paused ? '#i-play' : '#i-pause');
     const savedVol = NU.store.get('notre-univers:vol', 60); vol.value = savedVol; audio.volume = savedVol / 100; setRange(vol); setRange(seek);

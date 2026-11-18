@@ -27,8 +27,11 @@ window.CONFIG = {
 
   /* ---------- MUSIQUE ---------- */
   music: {
-    file: "assets/audio/musique.mp3",
-    title: "Notre musique ♡"
+    title: "Notre musique ♡",
+    tracks: [                       // Les morceaux s'enchaînent dans cet ordre
+      { file: "assets/audio/Love.mp3", title: "Love" },
+      { file: "assets/audio/Life.mp3", title: "Life" }
+    ]
   },
 
   /* ---------- SONS (optionnel) ----------
